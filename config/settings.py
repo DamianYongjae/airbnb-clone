@@ -39,6 +39,8 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+THIRD_PARTY_APPS = []
+
 PROJECT_APPS = [
     "users.apps.UsersConfig",
 ]
@@ -119,4 +121,5 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+# IF YOU WANT TO USE CUSTOM USER MODEL, ADD BELOW LINE. IF NOT, YOU DON'T HAVE TO DO
 AUTH_USER_MODEL = "users.User"
