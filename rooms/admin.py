@@ -44,7 +44,9 @@ class RoomAdmin(admin.ModelAdmin):
         "check_in",
         "check_out",
         "instant_book",
+        "count_amenities",
     )
+
     list_filter = (
         "instant_book",
         "host__superhost",  # foreign key
@@ -63,6 +65,9 @@ class RoomAdmin(admin.ModelAdmin):
         "facility",
         "house_rule",
     )
+
+    def count_amenities(self, obj):
+        return obj.amenities.count()
 
 
 @admin.register(models.Photo)
