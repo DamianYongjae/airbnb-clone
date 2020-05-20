@@ -30,7 +30,7 @@ class RoomAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Basic Info",
-            {"fields": ("name", "description", "country", "city", "price")},
+            {"fields": ("name", "description", "country", "address", "city", "price")},
         ),
         ("Times", {"fields": ("check_in", "check_out", "instant_book")}),
         ("Spaces", {"fields": ("guests", "beds", "bedrooms", "baths")}),
@@ -47,6 +47,7 @@ class RoomAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "country",
+        "address",
         "city",
         "price",
         "guests",
@@ -64,7 +65,7 @@ class RoomAdmin(admin.ModelAdmin):
     list_filter = (
         "instant_book",
         "host__superhost",  # foreign key
-        "room_tpye",
+        "room_type",
         "amenities",
         "facility",
         "house_rule",

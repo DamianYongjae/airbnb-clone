@@ -82,7 +82,7 @@ class Room(core_models.TimeStampedModel):
     host = models.ForeignKey(
         user_models.User, related_name="rooms", on_delete=models.CASCADE
     )
-    room_tpye = models.ForeignKey(
+    room_type = models.ForeignKey(
         RoomType, related_name="rooms", on_delete=models.SET_NULL, null=True
     )
     amenities = models.ManyToManyField(Amenity, related_name="rooms", blank=True)
@@ -99,7 +99,10 @@ class Room(core_models.TimeStampedModel):
     def total_rating(self):
         all_reviews = self.reviews.all()
         all_ratings = 0
-        for review in all_reviews:
-            all_ratings += review.rating_average()
+        if len(all_reviews) > 0:
+            for review in all_reviews:
+                all_ratings += review.rating_average()
 
-        return all_ratings / len(all_reviews)
+            return all_ratings / len(all_reviews)
+        return 0
+
