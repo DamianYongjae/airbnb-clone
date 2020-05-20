@@ -14,3 +14,4 @@ class Command(BaseCommand):
         times = options.get("times")
         for t in range(0, int(times)):
             print("i love you")
+            self.stdout.write(self.style.SUCCESS("success"))
