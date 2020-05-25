@@ -44,8 +44,8 @@ def search(request):
     room_types = models.RoomType.objects.all()
     amenities = models.Amenity.objects.all()
     facilities = models.Facility.objects.all()
-    instant = request.GET.get("instant", False)
-    super_host = request.GET.get("super_host", False)
+    instant = bool(request.GET.get("instant", False))
+    super_host = bool(request.GET.get("super_host", False))
     s_amenities = request.GET.getlist("amenities")
     s_facilities = request.GET.getlist("facilities")
 
@@ -79,6 +79,30 @@ def search(request):
         filter_arg["room_type__pk"] = room_type  # foreign key
 
     filter_arg["country"] = country
+
+    if price != 0:
+        filter_arg["price__lte"] = price
+    if guests != 0:
+        filter_arg["guests__gte"] = guests
+    if bedrooms != 0:
+        filter_arg["bedrooms__gte"] = bedrooms
+    if beds != 0:
+        filter_arg["beds__gte"] = beds
+    if baths != 0:
+        filter_arg["baths__gte"] = baths
+
+    if instant is True:
+        filter_arg["instant_book"] = True
+    if super_host is True:
+        filter_arg["host__superhost"] = True
+
+    if len(s_amenities) > 0:
+        for s_amenity in s_amenities:
+            filter_arg["amenities__pk"] = int(s_amenity)
+
+    if len(s_facilities) > 0:
+        for s_facility in s_facilities:
+            filter_arg["facility__pk"] = int(s_facility)
 
     rooms = models.Room.objects.filter(**filter_arg)
 
