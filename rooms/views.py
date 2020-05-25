@@ -33,9 +33,63 @@ class RoomDetail(DetailView):
 
 def search(request):
 
-    form = forms.SearchForm()
+    country = request.GET.get("country")
 
-    return render(request, "rooms/search.html", {"form": form})
+    if country:
+
+        form = forms.SearchForm(request.GET)
+
+        if form.is_valid():
+            print(form.cleaned_data)
+            city = form.cleaned_data.get("city")
+            country = form.cleaned_data.get("country")
+            room_type = form.cleaned_data.get("room_type")
+            price = form.cleaned_data.get("price")
+            guests = form.cleaned_data.get("guests")
+            bedrooms = form.cleaned_data.get("bedrooms")
+            beds = form.cleaned_data.get("beds")
+            baths = form.cleaned_data.get("baths")
+            instant_book = form.cleaned_data.get("instant_book")
+            super_host = form.cleaned_data.get("super_host")
+            amenities = form.cleaned_data.get("amenities")
+            facilities = form.cleaned_data.get("facilities")
+
+            filter_arg = {}
+
+            if city != "Anywhere":
+                filter_arg["city__startswith"] = city
+            if room_type is not None:
+                filter_arg["room_type"] = room_type  # foreign key
+
+            filter_arg["country"] = country
+
+            if price is not None:
+                filter_arg["price__lte"] = price
+            if guests is not None:
+                filter_arg["guests__gte"] = guests
+            if bedrooms is not None:
+                filter_arg["bedrooms__gte"] = bedrooms
+            if beds is not None:
+                filter_arg["beds__gte"] = beds
+            if baths is not None:
+                filter_arg["baths__gte"] = baths
+
+            if instant_book is True:
+                filter_arg["instant_book"] = True
+            if super_host is True:
+                filter_arg["host__superhost"] = True
+
+            for amenity in amenities:
+                filter_arg["amenities"] = amenity
+
+            for facility in facilities:
+                filter_arg["facility"] = facility
+
+            rooms = models.Room.objects.filter(**filter_arg)
+    else:
+        form = forms.SearchForm()
+
+    return render(request, "rooms/search.html", {"form": form, "rooms": rooms})
 
 
 # implement by not using django form api
