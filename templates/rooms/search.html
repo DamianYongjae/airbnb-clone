@@ -22,6 +22,16 @@
         <h3>{{room.name}}</h3>
     {% endfor %}
 
+    <h5> 
+   {% if rooms.number < 1 %}
+      <a href="?page={{page_obj.number|add:"-1"}}" >Previous</a>
+   {% endif %}
+   Page {{rooms.number}} of {{rooms.paginator.num_pages}}
+   {% if rooms.number > rooms.paginator.num_pages %}
+      <a href="?page={{page_obj.number|add:"1"}}" >Next</a>
+   {% endif %}
+
+   </h5>
 {% endblock content %}
 {% comment %} 
 
