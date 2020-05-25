@@ -3,6 +3,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render, redirect
+from django_countries import countries
 from . import models
 
 
@@ -31,10 +32,25 @@ class RoomDetail(DetailView):
 
 
 def search(request):
-    city = request.GET.get("city")
+    city = request.GET.get("city", "Anywhere")
     city = str.capitalize(city)
+    country = request.GET.get("country", "KR")
+    room_type = int(request.GET.get("room_type", 0))
+    room_types = models.RoomType.objects.all()
     print(city)
-    return render(request, "rooms/search.html", {"city": city})
+
+    form = {
+        "city": city,
+        "s_country": country,
+        "s_room_type": room_type,
+    }
+
+    choices = {
+        "countries": countries,
+        "room_types": room_types,
+    }
+
+    return render(request, "rooms/search.html", {**form, **choices},)
 
 
 # def room_detail(request, pk):
