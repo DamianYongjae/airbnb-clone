@@ -36,7 +36,6 @@ def search(request):
     city = str.capitalize(city)
     country = request.GET.get("country", "KR")
     room_type = int(request.GET.get("room_type", 0))
-    print(city)
     price = int(request.GET.get("price", 0))
     guests = int(request.GET.get("guests", 0))
     bedrooms = int(request.GET.get("bedrooms", 0))
@@ -72,7 +71,18 @@ def search(request):
         "facilities": facilities,
     }
 
-    return render(request, "rooms/search.html", {**form, **choices},)
+    filter_arg = {}
+
+    if city != "Anywhere":
+        filter_arg["city__startswith"] = city
+    if room_type != 0:
+        filter_arg["room_type__pk"] = room_type  # foreign key
+
+    filter_arg["country"] = country
+
+    rooms = models.Room.objects.filter(**filter_arg)
+
+    return render(request, "rooms/search.html", {**form, **choices, "rooms": rooms},)
 
 
 # def room_detail(request, pk):
