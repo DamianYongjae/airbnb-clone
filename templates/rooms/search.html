@@ -13,7 +13,20 @@
     <h2>Search!</h2>
 
     <form method="get" action="{%url "rooms:search"%}">
-        <div>
+        {{form.as_p}}
+        <button>Search</button>
+    </form>
+
+    <h3>Results</h3>
+    {% for room in rooms  %}
+        <h3>{{room.name}}</h3>
+    {% endfor %}
+
+{% endblock content %}
+{% comment %} 
+
+"""Manual form"""
+<div>
             <label for="city">City</label>
             <input value="{{city}}" id="city" name="city" placeholder="Search by City" />
         </div>
@@ -113,14 +126,4 @@
                     </li>
                 {% endfor %}
             </ul>
-        </div>
-
-        <button>Search</button>
-    </form>
-
-    <h3>Results</h3>
-    {% for room in rooms  %}
-        <h3>{{room.name}}</h3>
-    {% endfor %}
-
-{% endblock content %}
+        </div> {% endcomment %}
